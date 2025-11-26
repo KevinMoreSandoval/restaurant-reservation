@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Controlador;
 import BD.ConnectionBD;
 import  java.sql.Connection;
@@ -9,10 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 
-/**
- *
- * @Gian
- */
 public class administrador {
     
     public boolean validaciónlogin(String usuario,String password){
