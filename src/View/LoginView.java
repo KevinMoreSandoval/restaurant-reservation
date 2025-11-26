@@ -255,6 +255,8 @@ public class LoginView extends JFrame {
                                 "Bienvenido al sistema, " + usuario + ".",
                                 "Acceso Concedido",
                                 JOptionPane.INFORMATION_MESSAGE);
+                                setVisible(false);
+                       
                         // Aquí puedes abrir la ventana principal del sistema
                         // new VentanaPrincipal().setVisible(true);
                         // dispose();
