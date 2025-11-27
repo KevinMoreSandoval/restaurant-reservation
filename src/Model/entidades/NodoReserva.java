@@ -1,4 +1,4 @@
-package Model;
+package Model.entidades;
 
 public class NodoReserva {
 

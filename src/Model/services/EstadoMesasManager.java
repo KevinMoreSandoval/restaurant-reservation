@@ -1,6 +1,6 @@
 package Model.services;
 
-import Model.EstadoMesa;
+import Model.entidades.EstadoMesa;
 import java.util.HashMap;
 
 public class EstadoMesasManager {

@@ -1,6 +1,6 @@
 package View;
 
-import Controller.ConnectionBD;
+import Model.dao.AdministradorDAO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -243,8 +243,8 @@ public class LoginView extends JFrame {
         // Ejecutar en un hilo separado para no bloquear la UI
         new Thread(() -> {
             try {
-                ConnectionBD admin = new ConnectionBD();
-                boolean loginExitoso = admin.(usuario, password);
+                AdministradorDAO admin = new AdministradorDAO();
+                boolean loginExitoso = admin.validarLogin(usuario, password);
 
                 SwingUtilities.invokeLater(() -> {
                     btnLogin.setEnabled(true);
