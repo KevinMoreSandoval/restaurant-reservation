@@ -1,6 +1,6 @@
 package View;
 
-import Controlador.administrador;
+import Controller.ConnectionBD;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -243,8 +243,8 @@ public class LoginView extends JFrame {
         // Ejecutar en un hilo separado para no bloquear la UI
         new Thread(() -> {
             try {
-                administrador admin = new administrador();
-                boolean loginExitoso = admin.validaciónlogin(usuario, password);
+                ConnectionBD admin = new ConnectionBD();
+                boolean loginExitoso = admin.(usuario, password);
 
                 SwingUtilities.invokeLater(() -> {
                     btnLogin.setEnabled(true);
