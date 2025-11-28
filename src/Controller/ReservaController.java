@@ -3,6 +3,7 @@ package Controller;
 import Model.bd.ConnectionBD;
 import Model.entidades.Reserva;
 import Model.entidades.EstadoMesa;
+import Model.entidades.ListaReservas;
 import Model.services.EstadoMesasManager;
 
 import java.sql.*;
@@ -12,9 +13,16 @@ import java.util.List;
 public class ReservaController {
 
     private EstadoMesasManager estados;
+    private ListaReservas listaReservas;
 
     public ReservaController(EstadoMesasManager estados) {
         this.estados = estados;
+        this.listaReservas = new ListaReservas();
+    }
+
+    public ReservaController(EstadoMesasManager estados, ListaReservas listaReservas) {
+        this.estados = estados;
+        this.listaReservas = listaReservas;
     }
 
     // Registrar una nueva reserva
@@ -38,6 +46,12 @@ public class ReservaController {
 
             if (rows > 0) {
                 estados.setEstado(r.getFecha(), r.getIdMesa(), r.getHora(), EstadoMesa.OCUPADA);
+
+                // Agregar también a la lista enlazada
+                listaReservas.agregar(r);
+                System.out.println("✅ Reserva guardada en BD y en lista enlazada");
+                System.out.println("📊 Total de reservas en lista: " + listaReservas.contar());
+
                 return true;
             }
 
@@ -82,5 +96,40 @@ public class ReservaController {
         }
 
         return lista;
+    }
+
+    // Obtener la instancia de ListaReservas
+    public ListaReservas getListaReservas() {
+        return listaReservas;
+    }
+
+    // Obtener todas las reservas de la lista enlazada
+    public List<Reserva> obtenerReservasDesdeListaEnlazada() {
+        return listaReservas.obtenerTodas();
+    }
+
+    // Buscar reservas por fecha en la lista enlazada
+    public List<Reserva> buscarPorFechaEnLista(String fecha) {
+        return listaReservas.buscarPorFecha(fecha);
+    }
+
+    // Buscar reservas por DNI en la lista enlazada
+    public List<Reserva> buscarPorDniEnLista(String dni) {
+        return listaReservas.buscarPorDni(dni);
+    }
+
+    // Buscar reservas por mesa en la lista enlazada
+    public List<Reserva> buscarPorMesaEnLista(int idMesa) {
+        return listaReservas.buscarPorMesa(idMesa);
+    }
+
+    // Contar reservas en la lista enlazada
+    public int contarReservasEnLista() {
+        return listaReservas.contar();
+    }
+
+    // Mostrar todas las reservas de la lista enlazada
+    public void mostrarReservasEnLista() {
+        listaReservas.mostrarReservas();
     }
 }

@@ -2,6 +2,7 @@ package View;
 
 import Controller.MesaController;
 import Controller.ReservaController;
+import Model.entidades.ListaReservas;
 import Model.entidades.Mesa;
 import Model.entidades.Reserva;
 import Model.services.EstadoMesasManager;
@@ -16,8 +17,9 @@ import java.util.List;
 
 public class RegistrarReservaView extends JFrame {
 
-    private ReservaController reservaController;
-    private MesaController mesaController;
+    private final ReservaController reservaController;
+    private final MesaController mesaController;
+    private final ListaReservas listaReservas;
 
     // Componentes
     private JTextField txtNombre;
@@ -43,7 +45,8 @@ public class RegistrarReservaView extends JFrame {
     public RegistrarReservaView() {
         // Inicializar controladores
         EstadoMesasManager estadosManager = new EstadoMesasManager();
-        reservaController = new ReservaController(estadosManager);
+        listaReservas = new ListaReservas();
+        reservaController = new ReservaController(estadosManager, listaReservas);
         mesaController = new MesaController();
 
         initComponents();
@@ -160,8 +163,7 @@ public class RegistrarReservaView extends JFrame {
         dateChooser.setBackground(COLOR_WHITE);
         dateChooser.setBorder(BorderFactory.createLineBorder(COLOR_PRIMARY, 1));
         dateChooser.getDateEditor().getUiComponent().setBorder(
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        );
+                BorderFactory.createEmptyBorder(5, 10, 5, 10));
         panelPrincipal.add(dateChooser, gbc);
 
         // Horario
@@ -173,7 +175,7 @@ public class RegistrarReservaView extends JFrame {
         gbc.gridx = 1;
         gbc.weightx = 0.7;
         String[] horarios = {
-            "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"
+                "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"
 
         };
         cmbHorario = new JComboBox<>(horarios);
@@ -247,8 +249,12 @@ public class RegistrarReservaView extends JFrame {
         btnLimpiar = crearBoton("Limpiar Formulario", COLOR_DANGER);
         btnLimpiar.addActionListener(e -> limpiarFormulario());
 
+        JButton btnVerLista = crearBoton("Ver Lista Enlazada", COLOR_INFO);
+        btnVerLista.addActionListener(e -> mostrarReservasEnLista());
+
         panel.add(btnRegistrar);
         panel.add(btnLimpiar);
+        panel.add(btnVerLista);
 
         return panel;
     }
@@ -263,8 +269,7 @@ public class RegistrarReservaView extends JFrame {
         panelMensajes.setBackground(COLOR_WHITE);
         panelMensajes.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_PRIMARY, 2),
-                BorderFactory.createEmptyBorder(12, 18, 12, 18)
-        ));
+                BorderFactory.createEmptyBorder(12, 18, 12, 18)));
 
         JLabel lblResultado = new JLabel("Mensajes del Sistema:");
         lblResultado.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -321,10 +326,12 @@ public class RegistrarReservaView extends JFrame {
 
         // Efecto hover
         button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(color.darker());
             }
 
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(color);
             }
@@ -408,11 +415,13 @@ public class RegistrarReservaView extends JFrame {
         Reserva reserva = new Reserva(nombre, apellido, dni, fecha, hora, idMesa, "CONFIRMADA");
 
         if (reservaController.registrarReserva(reserva)) {
+            int totalEnLista = reservaController.contarReservasEnLista();
             mostrarMensaje("✅ Reserva registrada exitosamente\n"
                     + "Cliente: " + nombre + " " + apellido + " (DNI: " + dni + ")\n"
                     + "Mesa: " + idMesa + " (Capacidad: " + mesaSeleccionada.getCapacidad() + ") | "
                     + "Personas: " + numPersonas + "\n"
-                    + "Fecha: " + fecha + " | Hora: " + hora, true);
+                    + "Fecha: " + fecha + " | Hora: " + hora + "\n"
+                    + "📊 Total de reservas en lista enlazada: " + totalEnLista, true);
             limpiarFormulario();
         } else {
             mostrarMensaje("Error al registrar la reserva. Intente nuevamente.", false);
@@ -483,6 +492,37 @@ public class RegistrarReservaView extends JFrame {
                 repaint();
             }
         });
+    }
+
+    private void mostrarReservasEnLista() {
+        List<Reserva> reservas = reservaController.obtenerReservasDesdeListaEnlazada();
+
+        if (reservas.isEmpty()) {
+            mostrarMensaje("No hay reservas en la lista enlazada.", false);
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== RESERVAS EN LISTA ENLAZADA ===\n");
+        sb.append("Total: ").append(reservas.size()).append(" reserva(s)\n\n");
+
+        int contador = 1;
+        for (Reserva r : reservas) {
+            sb.append(contador).append(". ")
+                    .append(r.getNombreCliente()).append(" ").append(r.getApellidoCliente())
+                    .append(" | DNI: ").append(r.getDniCliente())
+                    .append("\n   Fecha: ").append(r.getFecha())
+                    .append(" | Hora: ").append(r.getHora())
+                    .append(" | Mesa: ").append(r.getIdMesa())
+                    .append(" | Estado: ").append(r.getEstado())
+                    .append("\n");
+            contador++;
+        }
+
+        mostrarMensaje(sb.toString(), true);
+
+        // También mostrar en consola
+        reservaController.mostrarReservasEnLista();
     }
 
     // Método main para probar la vista

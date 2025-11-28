@@ -22,7 +22,7 @@ public class AdministradorDAO {
             return rs.next();
 
         } catch (Exception e) {
-            System.out.println("❌ Error login: " + e.getMessage());
+            System.out.println("Error login: " + e.getMessage());
             return false;
         }
     }

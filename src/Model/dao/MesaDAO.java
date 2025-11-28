@@ -27,7 +27,7 @@ public class MesaDAO {
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Error al obtener mesas: " + e.getMessage());
+            System.out.println("Error al obtener mesas: " + e.getMessage());
         }
 
         return lista;

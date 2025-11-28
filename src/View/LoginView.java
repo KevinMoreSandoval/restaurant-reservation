@@ -23,6 +23,13 @@ public class LoginView extends JFrame {
     private final Color COLOR_ERROR = new Color(220, 53, 69);
     private final Color COLOR_BORDER = new Color(206, 212, 218);
 
+    // Callback para cuando el login sea exitoso
+    private Runnable onLoginSuccess;
+
+    public void setOnLoginSuccess(Runnable callback) {
+        this.onLoginSuccess = callback;
+    }
+
     public LoginView() {
         configurarVentana();
         inicializarComponentes();
@@ -49,8 +56,7 @@ public class LoginView extends JFrame {
         panelPrincipal.setLayout(null);
         panelPrincipal.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                BorderFactory.createEmptyBorder(0, 0, 0, 0)
-        ));
+                BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 
         // Panel de encabezado
         JPanel panelHeader = new JPanel();
@@ -100,24 +106,21 @@ public class LoginView extends JFrame {
         txtUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         txtUsuario.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
-        ));
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)));
 
         txtUsuario.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 txtUsuario.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(COLOR_PRIMARY, 2),
-                        BorderFactory.createEmptyBorder(10, 20, 10, 20)
-                ));
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20)));
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 txtUsuario.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                        BorderFactory.createEmptyBorder(10, 20, 10, 20)
-                ));
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20)));
             }
         });
 
@@ -133,24 +136,21 @@ public class LoginView extends JFrame {
         txtPassword.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         txtPassword.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
-        ));
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)));
 
         txtPassword.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 txtPassword.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(COLOR_PRIMARY, 2),
-                        BorderFactory.createEmptyBorder(10, 20, 10, 20)
-                ));
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20)));
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 txtPassword.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                        BorderFactory.createEmptyBorder(10, 20, 10, 20)
-                ));
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20)));
             }
         });
 
@@ -251,15 +251,17 @@ public class LoginView extends JFrame {
                     btnLogin.setText("Iniciar Sesión");
 
                     if (loginExitoso) {
-                        JOptionPane.showMessageDialog(this,
-                                "Bienvenido al sistema, " + usuario + ".",
-                                "Acceso Concedido",
-                                JOptionPane.INFORMATION_MESSAGE);
-                                setVisible(false);
-                       
-                        // Aquí puedes abrir la ventana principal del sistema
-                        // new VentanaPrincipal().setVisible(true);
-                        // dispose();
+                        // Si hay un callback configurado, ejecutarlo
+                        if (onLoginSuccess != null) {
+                            onLoginSuccess.run();
+                        } else {
+                            // Comportamiento por defecto si no hay callback
+                            JOptionPane.showMessageDialog(LoginView.this,
+                                    "Bienvenido al sistema, " + usuario + ".",
+                                    "Acceso Concedido",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            setVisible(false);
+                        }
                     } else {
                         mostrarError("Usuario o contraseña incorrectos");
                         txtPassword.setText("");
@@ -274,6 +276,7 @@ public class LoginView extends JFrame {
                 });
             }
         }).start();
+
     }
 
     private void mostrarError(String mensaje) {
