@@ -199,4 +199,62 @@ public class ListaReservas {
             System.out.println("❌ Error al cargar reservas de hoy: " + e.getMessage());
         }
     }
+    //Buscar reserva por dia
+    public List<Reserva> buscarPorDia(String fecha){
+        List<Reserva> lista = new ArrayList<>();
+        NodoReserva actual = cabeza;
+        
+        while (actual!= null) {
+        if(actual.reserva.getFecha().equals(fecha)){
+            lista.add(actual.reserva);
+        
+        }
+            actual = actual.siguiente;
+        }
+        
+        return lista;
+        
+    }
+    //Buscar reservas por mes ()
+    
+    public List<Reserva> buscarPorMes (int mes ,int anio){
+        List<Reserva> lista = new ArrayList<>();    
+        NodoReserva actual = cabeza;
+        
+        String mesStr = (mes < 10) ? "0" + mes : String.valueOf(mes);
+        
+        while (actual!=null) {            
+            
+            String fecha = actual.reserva.getFecha();
+            if(fecha.startsWith(anio + "-" + mesStr)){
+            lista.add(actual.reserva);
+            
+            }
+            actual = actual.siguiente;
+        }
+        return lista;
+        
+        
+    }
+    
+     public List<Reserva> buscarPorAnio (int anio){
+        List<Reserva> lista = new ArrayList<>();    
+        NodoReserva actual = cabeza;
+        
+        while (actual!=null) {            
+            
+            String fecha = actual.reserva.getFecha();
+            if(actual.reserva.getFecha().startsWith(String.valueOf(anio))){
+            lista.add(actual.reserva);
+            
+            }
+            actual = actual.siguiente;
+        }
+        return lista;
+        
+        
+    }
+    
+    
+    
 }
