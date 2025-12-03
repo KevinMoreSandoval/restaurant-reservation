@@ -4,6 +4,7 @@ import Model.bd.ConnectionBD;
 import Model.entidades.Reserva;
 import Model.entidades.EstadoMesa;
 import Model.entidades.ListaReservas;
+import Model.entidades.ArbolReservas;
 import Model.services.EstadoMesasManager;
 
 import java.sql.*;
@@ -14,15 +15,43 @@ public class ReservaController {
 
     private EstadoMesasManager estados;
     private ListaReservas listaReservas;
+    private ArbolReservas arbolReservas;
 
     public ReservaController(EstadoMesasManager estados) {
         this.estados = estados;
         this.listaReservas = new ListaReservas();
+        this.arbolReservas = new ArbolReservas();
+        // Cargar todas las reservas existentes al árbol y a la lista
+        this.arbolReservas.cargarDesdeBaseDatos();
+        this.listaReservas.cargarDesdeBaseDatos();
+        // Sincronizar estados con el árbol
+        sincronizarEstadosConArbol();
     }
 
     public ReservaController(EstadoMesasManager estados, ListaReservas listaReservas) {
         this.estados = estados;
         this.listaReservas = listaReservas;
+        this.arbolReservas = new ArbolReservas();
+        // Cargar todas las reservas existentes al árbol
+        this.arbolReservas.cargarDesdeBaseDatos();
+        // Sincronizar estados con el árbol
+        sincronizarEstadosConArbol();
+    }
+
+    /**
+     * Sincroniza el EstadoMesasManager con las reservas del árbol
+     * Debe llamarse después de cargar el árbol desde la BD
+     */
+    private void sincronizarEstadosConArbol() {
+        List<Reserva> todasReservas = arbolReservas.obtenerTodasEnOrden();
+
+        for (Reserva r : todasReservas) {
+            if (!r.getEstado().equals("CANCELADA")) {
+                estados.setEstado(r.getFecha(), r.getIdMesa(), r.getHora(), EstadoMesa.OCUPADA);
+            }
+        }
+
+        System.out.println("✅ EstadoMesasManager sincronizado con " + todasReservas.size() + " reservas");
     }
 
     // Registrar una nueva reserva
@@ -47,10 +76,12 @@ public class ReservaController {
             if (rows > 0) {
                 estados.setEstado(r.getFecha(), r.getIdMesa(), r.getHora(), EstadoMesa.OCUPADA);
 
-                // Agregar también a la lista enlazada
+                // Agregar a la lista enlazada y al árbol
                 listaReservas.agregar(r);
-                System.out.println("✅ Reserva guardada en BD y en lista enlazada");
-                System.out.println("📊 Total de reservas en lista: " + listaReservas.contar());
+                arbolReservas.insertar(r);
+                System.out.println("✅ Reserva guardada en BD, lista enlazada y árbol");
+                System.out.println("📊 Total en lista: " + listaReservas.contar() + " | Total en árbol: "
+                        + arbolReservas.contarReservas());
 
                 return true;
             }
@@ -62,8 +93,14 @@ public class ReservaController {
         return false;
     }
 
-    // Verificar si una mesa está libre según la estructura en memoria
+    // Verificar si una mesa está libre consultando el árbol y luego la memoria
     public boolean mesaDisponible(String fecha, int idMesa, String horario) {
+        // Primero consultar el árbol (que tiene todas las reservas de la BD)
+        if (arbolReservas.existeReserva(fecha, idMesa, horario)) {
+            return false; // Ya existe una reserva activa
+        }
+
+        // Luego verificar en memoria (por si hay cambios recientes)
         EstadoMesa est = estados.getEstado(fecha, idMesa, horario);
         return est == null || est == EstadoMesa.LIBRE;
     }
@@ -131,5 +168,88 @@ public class ReservaController {
     // Mostrar todas las reservas de la lista enlazada
     public void mostrarReservasEnLista() {
         listaReservas.mostrarReservas();
+    }
+
+    // ========== MÉTODOS DEL ÁRBOL (BÚSQUEDA EFICIENTE) ==========
+
+    /**
+     * Buscar reservas por fecha usando el árbol (O(log n))
+     * Más eficiente que buscar en la lista enlazada
+     */
+    public List<Reserva> buscarPorFechaEnArbol(String fecha) {
+        return arbolReservas.buscarPorFecha(fecha);
+    }
+
+    /**
+     * Obtener reservas del día de hoy usando el árbol
+     */
+    public List<Reserva> obtenerReservasDeHoy() {
+        return arbolReservas.obtenerReservasDeHoy();
+    }
+
+    /**
+     * Obtener todas las reservas del árbol en orden
+     */
+    public List<Reserva> obtenerTodasDesdeArbol() {
+        return arbolReservas.obtenerTodasEnOrden();
+    }
+
+    /**
+     * Obtener la instancia del árbol de reservas
+     */
+    public ArbolReservas getArbolReservas() {
+        return arbolReservas;
+    }
+
+    /**
+     * Contar reservas en el árbol
+     */
+    public int contarReservasEnArbol() {
+        return arbolReservas.contarReservas();
+    }
+
+    /**
+     * Mostrar estructura del árbol (para debugging)
+     */
+    public void mostrarEstructuraArbol() {
+        arbolReservas.mostrarEstructura();
+    }
+
+    /**
+     * Obtener reservas del día actual desde la base de datos
+     * Útil para mostrar reservas de hoy incluso después de reiniciar el programa
+     */
+    public List<Reserva> obtenerReservasDeHoyDesdeBD() {
+        List<Reserva> lista = new ArrayList<>();
+        // Obtener fecha actual en formato yyyy-MM-dd
+        java.time.LocalDate hoy = java.time.LocalDate.now();
+        String fechaHoy = hoy.toString();
+
+        String sql = "SELECT * FROM reservas WHERE fecha = ? ORDER BY hora";
+
+        try (Connection cx = ConnectionBD.conectar();
+                PreparedStatement ps = cx.prepareStatement(sql)) {
+
+            ps.setString(1, fechaHoy);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Reserva r = new Reserva(
+                        rs.getInt("id_reserva"),
+                        rs.getString("nombre_cliente"),
+                        rs.getString("apellido_cliente"),
+                        rs.getString("dni_cliente"),
+                        rs.getString("fecha"),
+                        rs.getString("hora"),
+                        rs.getInt("id_mesa"),
+                        rs.getString("estado"));
+                lista.add(r);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener reservas de hoy desde BD: " + e.getMessage());
+        }
+
+        return lista;
     }
 }

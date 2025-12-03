@@ -1,14 +1,17 @@
+import Model.entidades.ListaReservas;
+import Model.services.EstadoMesasManager;
 import View.LoginView;
 import View.Panel;
 import View.RegistrarReservaView;
+import View.ReservasHoyView;
 import View.VerificarReservaView;
 import javax.swing.*;
 
-/**
- * Clase principal del Sistema de Reservas
- * Punto de entrada de la aplicación
- */
 public class main {
+
+    // Instancias compartidas
+    private static EstadoMesasManager estadosManager;
+    private static ListaReservas listaReservas;
 
     public static void main(String[] args) {
         // Configurar el Look and Feel del sistema
@@ -17,6 +20,12 @@ public class main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Inicializar datos compartidos
+        estadosManager = new EstadoMesasManager();
+        listaReservas = new ListaReservas();
+        // Cargar solo las reservas de hoy desde la BD
+        listaReservas.cargarReservasDeHoyDesdeBD();
 
         // Iniciar la aplicación en el Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
@@ -61,6 +70,11 @@ public class main {
             mostrarVerificarReserva(); // Abrir vista de verificación
         });
 
+        panel.getBtnReservasHoy().addActionListener(e -> {
+            frame.dispose(); // Cerrar el panel principal
+            mostrarVerificarReservaHoy(); // Abrir vista con reservas de hoy
+        });
+
         frame.add(panel);
         frame.setVisible(true);
     }
@@ -69,10 +83,11 @@ public class main {
      * Muestra la vista para registrar una nueva reserva
      */
     private static void mostrarRegistrarReserva() {
-        RegistrarReservaView registrarView = new RegistrarReservaView();
+        // Pasar instancias compartidas
+        RegistrarReservaView registrarView = new RegistrarReservaView(estadosManager, listaReservas);
 
         // Agregar botón de regreso al panel principal
-        JButton btnVolver = new JButton("← Volver al Panel");
+        JButton btnVolver = new JButton("Volver al Panel");
         btnVolver.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
         btnVolver.setBackground(new java.awt.Color(127, 29, 29));
         btnVolver.setForeground(java.awt.Color.WHITE);
@@ -100,10 +115,11 @@ public class main {
      * Muestra la vista para verificar reservas existentes
      */
     private static void mostrarVerificarReserva() {
-        VerificarReservaView verificarView = new VerificarReservaView();
+        // Pasar instancias compartidas
+        VerificarReservaView verificarView = new VerificarReservaView(estadosManager, listaReservas);
 
         // Agregar botón de regreso al panel principal
-        JButton btnVolver = new JButton("← Volver al Panel");
+        JButton btnVolver = new JButton("Volver al Panel");
         btnVolver.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
         btnVolver.setBackground(new java.awt.Color(127, 29, 29));
         btnVolver.setForeground(java.awt.Color.WHITE);
@@ -124,6 +140,27 @@ public class main {
         topPanel.add(btnVolver);
         verificarView.add(topPanel, java.awt.BorderLayout.NORTH);
 
+        // Configurar acción del botón "Reservas de Hoy" para abrir la nueva vista
+        verificarView.getBtnReservasHoy().addActionListener(e -> {
+            verificarView.dispose();
+            mostrarVerificarReservaHoy();
+        });
+
         verificarView.setVisible(true);
+    }
+
+    /**
+     * Muestra la vista con todas las reservas (Reservas de Hoy)
+     */
+    private static void mostrarVerificarReservaHoy() {
+        // Pasar instancias compartidas
+        ReservasHoyView reservasHoyView = new ReservasHoyView(estadosManager, listaReservas);
+
+        reservasHoyView.getBtnVolver().addActionListener(e -> {
+            reservasHoyView.dispose();
+            mostrarPanelPrincipal();
+        });
+
+        reservasHoyView.setVisible(true);
     }
 }

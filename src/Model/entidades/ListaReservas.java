@@ -1,5 +1,7 @@
 package Model.entidades;
 
+import Model.bd.ConnectionBD;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,5 +124,79 @@ public class ListaReservas {
             contador++;
         }
         System.out.println("Total de reservas: " + contar());
+    }
+
+    // Cargar todas las reservas desde la base de datos a la lista
+    public void cargarDesdeBaseDatos() {
+        // Limpiar la lista actual
+        cabeza = null;
+
+        String sql = "SELECT * FROM reservas ORDER BY fecha, hora";
+
+        try (Connection cx = ConnectionBD.conectar();
+                Statement stmt = cx.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+
+            int contador = 0;
+            while (rs.next()) {
+                Reserva reserva = new Reserva(
+                        rs.getInt("id_reserva"),
+                        rs.getString("nombre_cliente"),
+                        rs.getString("apellido_cliente"),
+                        rs.getString("dni_cliente"),
+                        rs.getString("fecha"),
+                        rs.getString("hora"),
+                        rs.getInt("id_mesa"),
+                        rs.getString("estado"));
+
+                agregar(reserva);
+                contador++;
+            }
+
+            System.out.println("📋 Lista de reservas cargada: " + contador + " reservas");
+
+        } catch (SQLException e) {
+            System.out.println("❌ Error al cargar reservas a la lista: " + e.getMessage());
+        }
+    }
+
+    // Cargar solo las reservas de hoy desde la base de datos
+    public void cargarReservasDeHoyDesdeBD() {
+        // Limpiar la lista actual
+        cabeza = null;
+
+        // Obtener fecha actual en formato yyyy-MM-dd
+        java.time.LocalDate hoy = java.time.LocalDate.now();
+        String fechaHoy = hoy.toString();
+
+        String sql = "SELECT * FROM reservas WHERE fecha = ? ORDER BY hora";
+
+        try (Connection cx = ConnectionBD.conectar();
+                PreparedStatement ps = cx.prepareStatement(sql)) {
+
+            ps.setString(1, fechaHoy);
+            ResultSet rs = ps.executeQuery();
+
+            int contador = 0;
+            while (rs.next()) {
+                Reserva reserva = new Reserva(
+                        rs.getInt("id_reserva"),
+                        rs.getString("nombre_cliente"),
+                        rs.getString("apellido_cliente"),
+                        rs.getString("dni_cliente"),
+                        rs.getString("fecha"),
+                        rs.getString("hora"),
+                        rs.getInt("id_mesa"),
+                        rs.getString("estado"));
+
+                agregar(reserva);
+                contador++;
+            }
+
+            System.out.println("📋 Reservas de hoy cargadas a la lista: " + contador + " reservas");
+
+        } catch (SQLException e) {
+            System.out.println("❌ Error al cargar reservas de hoy: " + e.getMessage());
+        }
     }
 }
