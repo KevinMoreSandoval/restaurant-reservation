@@ -31,4 +31,30 @@ public class ReservaDAO {
             return false;
         }
     }
+
+    /**
+     * Actualizar el estado de una reserva
+     */
+    public boolean actualizarEstado(int idReserva, String nuevoEstado) {
+        String sql = "UPDATE reservas SET estado = ? WHERE id_reserva = ?";
+
+        try (Connection cx = ConnectionBD.conectar();
+                PreparedStatement pr = cx.prepareStatement(sql)) {
+
+            pr.setString(1, nuevoEstado);
+            pr.setInt(2, idReserva);
+
+            int rowsAffected = pr.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("✅ Estado actualizado a " + nuevoEstado + " para reserva ID: " + idReserva);
+                return true;
+            }
+            return false;
+
+        } catch (Exception e) {
+            System.out.println("❌ Error al actualizar estado: " + e.getMessage());
+            return false;
+        }
+    }
 }

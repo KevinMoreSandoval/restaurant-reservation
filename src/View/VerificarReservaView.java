@@ -14,14 +14,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class VerificarReservaView extends JFrame {
+public class VerificarReservaView extends JFrame implements RefrescableView {
 
     private final ReservaController reservaController;
+    private List<Reserva> reservasActuales; // Lista de reservas actuales para acceso desde botones
 
     // Componentes
     private JDateChooser dateChooser;
     private JButton btnBuscarFecha;
     private JButton btnReservasHoy;
+    private JButton btnEditar;
     private JTable tableResultados;
     private DefaultTableModel modeloTabla;
     private JLabel lblTotalReservas;
@@ -30,6 +32,7 @@ public class VerificarReservaView extends JFrame {
     private final Color COLOR_PRIMARY = new Color(30, 41, 59);
     private final Color COLOR_SUCCESS = new Color(16, 185, 129);
     private final Color COLOR_INFO = new Color(37, 99, 235);
+    private final Color COLOR_WARNING = new Color(245, 158, 11);
     private final Color COLOR_BG = new Color(248, 250, 252);
     private final Color COLOR_WHITE = Color.WHITE;
     private final Color COLOR_BORDER = new Color(226, 232, 240);
@@ -38,6 +41,16 @@ public class VerificarReservaView extends JFrame {
         // Inicializar controlador con instancias compartidas
         reservaController = new ReservaController(estadosManager, listaReservas);
         initComponents();
+
+        // Cancelar automáticamente reservas pendientes expiradas al abrir la vista
+        // int canceladas = reservaController.cancelarReservasPendientesExpiradas();
+        int canceladas = 0;
+        if (canceladas > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Se cancelaron automáticamente " + canceladas + " reserva(s) pendiente(s) expirada(s)",
+                    "Cancelación Automática",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private void initComponents() {
@@ -110,11 +123,17 @@ public class VerificarReservaView extends JFrame {
         btnReservasHoy.setPreferredSize(new Dimension(180, 40));
         // Listener se configura en main.java para abrir nueva vista
 
+        btnEditar = crearBoton("Editar", COLOR_WARNING);
+        btnEditar.setPreferredSize(new Dimension(140, 40));
+        btnEditar.addActionListener(e -> editarReservaSeleccionada());
+
         panel.add(lblBuscar);
         panel.add(dateChooser);
         panel.add(btnBuscarFecha);
         panel.add(Box.createHorizontalStrut(15));
         panel.add(btnReservasHoy);
+        panel.add(Box.createHorizontalStrut(15));
+        panel.add(btnEditar);
 
         panelContenedor.add(panel, BorderLayout.CENTER);
 
@@ -141,11 +160,12 @@ public class VerificarReservaView extends JFrame {
         panelInfo.add(lblTotalReservas);
 
         // Tabla de resultados
-        String[] columnas = { "N°", "Cliente", "DNI", "Fecha", "Hora", "Mesa", "Estado" };
+        String[] columnas = { "N°", "Cliente", "DNI", "Fecha", "Hora", "Mesa", "Estado", "Editar" };
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                // Solo la columna de "Editar" (índice 7) debe ser editable para activar el editor
+                return column == 7;
             }
         };
 
@@ -175,15 +195,17 @@ public class VerificarReservaView extends JFrame {
         tableResultados.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
         tableResultados.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
         tableResultados.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
+        tableResultados.getColumnModel().getColumn(7).setCellRenderer(new ButtonRenderer());
 
         // Anchos de columnas
         tableResultados.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tableResultados.getColumnModel().getColumn(1).setPreferredWidth(200);
+        tableResultados.getColumnModel().getColumn(1).setPreferredWidth(250);
         tableResultados.getColumnModel().getColumn(2).setPreferredWidth(100);
         tableResultados.getColumnModel().getColumn(3).setPreferredWidth(120);
         tableResultados.getColumnModel().getColumn(4).setPreferredWidth(80);
         tableResultados.getColumnModel().getColumn(5).setPreferredWidth(70);
         tableResultados.getColumnModel().getColumn(6).setPreferredWidth(120);
+        tableResultados.getColumnModel().getColumn(7).setPreferredWidth(120);
 
         JScrollPane scrollPane = new JScrollPane(tableResultados);
         scrollPane.setBorder(BorderFactory.createLineBorder(COLOR_BORDER, 1));
@@ -269,19 +291,213 @@ public class VerificarReservaView extends JFrame {
     }
 
     private void mostrarReservasEnTabla(List<Reserva> reservas) {
+        // Guardar lista de reservas para acceso desde botones
+        this.reservasActuales = reservas;
+
         modeloTabla.setRowCount(0);
         int contador = 1;
         for (Reserva r : reservas) {
             String nombreCompleto = r.getNombreCliente() + " " + r.getApellidoCliente();
-            modeloTabla.addRow(new Object[] {
+
+                modeloTabla.addRow(new Object[] {
                     contador++,
                     nombreCompleto,
                     r.getDniCliente(),
                     r.getFecha(),
                     r.getHora(),
                     r.getIdMesa(),
-                    r.getEstado()
+                    formatearEstado(r.getEstado()),
+                    "Editar"
             });
+        }
+
+        // Aplicar renderer personalizado para la columna de estado
+        tableResultados.getColumnModel().getColumn(6).setCellRenderer(new EstadoCellRenderer());
+            // Aplicar editor para la columna de editar
+            tableResultados.getColumnModel().getColumn(7).setCellEditor(new ButtonEditor(new JCheckBox()));
+    }
+
+            /**
+             * Abre el diálogo para la reserva seleccionada (botón superior "Editar")
+             */
+            private void editarReservaSeleccionada() {
+            int fila = tableResultados.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this,
+                    "Por favor seleccione una reserva de la tabla para editar",
+                    "Seleccionar Reserva",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (reservasActuales == null) {
+                JOptionPane.showMessageDialog(this,
+                    "No hay reservas cargadas para editar",
+                    "Error Interno",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Convertir índice de la vista al índice del modelo por si hay sorter
+            int modelRow = tableResultados.convertRowIndexToModel(fila);
+
+            if (modelRow < 0 || modelRow >= reservasActuales.size()) {
+                JOptionPane.showMessageDialog(this,
+                    "No se pudo localizar la reserva seleccionada",
+                    "Error Interno",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Reserva reserva = reservasActuales.get(modelRow);
+
+            CambiarEstadoDialog dialog = new CambiarEstadoDialog(
+                VerificarReservaView.this,
+                reserva,
+                reservaController,
+                VerificarReservaView.this);
+            dialog.setVisible(true);
+            }
+
+    /**
+     * Formatea el estado con color HTML
+     */
+    private String formatearEstado(String estado) {
+        String color;
+        switch (estado) {
+            case "PENDIENTE":
+                color = "#F59E0B"; // Amarillo/Naranja
+                break;
+            case "CONFIRMADA":
+                color = "#10B981"; // Verde
+                break;
+            case "CANCELADA":
+                color = "#EF4444"; // Rojo
+                break;
+            default:
+                color = "#6B7280"; // Gris
+        }
+        return "<html><b style='color:" + color + "'>" + estado + "</b></html>";
+    }
+
+    /**
+     * Renderer personalizado para la columna de estado
+     */
+    private class EstadoCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            setHorizontalAlignment(SwingConstants.CENTER);
+            return c;
+        }
+    }
+
+    /**
+     * Renderer para el botón de editar
+     */
+    private class ButtonRenderer extends JButton implements javax.swing.table.TableCellRenderer {
+        public ButtonRenderer() {
+            setOpaque(true);
+            setFont(new Font("Segoe UI", Font.BOLD, 12));
+            setBackground(COLOR_INFO);
+            setForeground(COLOR_WHITE);
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            setText((value == null) ? "Editar" : value.toString());
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+            return this;
+        }
+    }
+
+    /**
+     * Editor para el botón de editar
+     */
+    private class ButtonEditor extends DefaultCellEditor {
+        private JButton button;
+        private String label;
+        private boolean isPushed;
+        private int currentRow;
+
+        public ButtonEditor(JCheckBox checkBox) {
+            super(checkBox);
+            button = new JButton();
+            button.setOpaque(true);
+            button.setFont(new Font("Segoe UI", Font.BOLD, 12));
+            button.setBackground(COLOR_INFO);
+            button.setForeground(COLOR_WHITE);
+            button.setFocusPainted(false);
+            button.setBorderPainted(false);
+            button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            button.addActionListener(e -> fireEditingStopped());
+
+            button.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    button.setBackground(COLOR_INFO.darker());
+                }
+
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    button.setBackground(COLOR_INFO);
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                boolean isSelected, int row, int column) {
+            label = (value == null) ? "Editar" : value.toString();
+            button.setText(label);
+            isPushed = true;
+            currentRow = row; // row is view index; convert when using
+            return button;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            if (isPushed) {
+                // Obtener la reserva correspondiente a la fila
+                if (reservasActuales != null) {
+                    // Convertir índice de la vista al índice del modelo por seguridad
+                    int modelRow = tableResultados.convertRowIndexToModel(currentRow);
+                    if (modelRow >= 0 && modelRow < reservasActuales.size()) {
+                        Reserva reserva = reservasActuales.get(modelRow);
+
+                        // Abrir el diálogo de cambio de estado
+                        CambiarEstadoDialog dialog = new CambiarEstadoDialog(
+                                VerificarReservaView.this,
+                                reserva,
+                                reservaController,
+                                VerificarReservaView.this);
+                        dialog.setVisible(true);
+                    }
+                }
+            }
+            isPushed = false;
+            return label;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
+        }
+    }
+
+    /**
+     * Método público para refrescar la tabla después de cambios
+     * Llamado por CambiarEstadoDialog después de actualizar el estado
+     */
+    public void refrescarTabla() {
+        Date fechaSeleccionada = dateChooser.getDate();
+        if (fechaSeleccionada != null) {
+            buscarPorFecha();
         }
     }
 }

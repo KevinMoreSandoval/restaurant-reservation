@@ -11,9 +11,11 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.List;
 
-public class ReservasHoyView extends JFrame {
+public class ReservasHoyView extends JFrame implements RefrescableView {
 
     private final ReservaController reservaController;
+    private List<Reserva> reservasActuales; // Lista de reservas actuales para acceso desde botones
+
     private JTable tableReservas;
     private DefaultTableModel modeloTabla;
     private JButton btnVolver;
@@ -31,6 +33,16 @@ public class ReservasHoyView extends JFrame {
     public ReservasHoyView(EstadoMesasManager estadosManager, ListaReservas listaReservas) {
         reservaController = new ReservaController(estadosManager, listaReservas);
         initComponents();
+
+        // Cancelar automáticamente reservas pendientes expiradas al abrir la vista
+        int canceladas = reservaController.cancelarReservasPendientesExpiradas();
+        if (canceladas > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Se cancelaron automáticamente " + canceladas + " reserva(s) pendiente(s) expirada(s)",
+                    "Cancelación Automática",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+
         cargarReservas();
     }
 
@@ -180,30 +192,39 @@ public class ReservasHoyView extends JFrame {
     }
 
     private void cargarReservas() {
-        modeloTabla.setRowCount(0);
-        List<Reserva> reservas = reservaController.obtenerReservasDesdeListaEnlazada();
+        // Obtener reservas registradas HOY por fecha_registro desde BD
+        this.reservasActuales = reservaController.obtenerReservasRegistradasHoy();
 
-        if (reservas.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "No hay reservas registradas para hoy",
-                    "Sin Reservas",
-                    JOptionPane.INFORMATION_MESSAGE);
+        modeloTabla.setRowCount(0);
+
+        if (reservasActuales.isEmpty()) {
+            lblTotal.setText("Total de reservas registradas hoy: 0");
         } else {
             int contador = 1;
-            for (Reserva r : reservas) {
+            for (Reserva r : reservasActuales) {
                 String nombreCompleto = r.getNombreCliente() + " " + r.getApellidoCliente();
                 modeloTabla.addRow(new Object[] {
-                        contador++,
-                        nombreCompleto,
-                        r.getDniCliente(),
-                        r.getFecha(),
-                        r.getHora(),
-                        r.getIdMesa(),
-                        r.getEstado()
+                    contador++,
+                    nombreCompleto,
+                    r.getDniCliente(),
+                    r.getFecha(),
+                    r.getHora(),
+                    r.getIdMesa(),
+                    r.getEstado()
                 });
             }
         }
 
-        lblTotal.setText("Total de reservas: " + reservas.size());
+        lblTotal.setText("Total de reservas registradas hoy: " + reservasActuales.size());
+    }
+
+
+
+    /**
+     * Método público para refrescar la tabla después de cambios
+     * Llamado por CambiarEstadoDialog después de actualizar el estado
+     */
+    public void refrescarTabla() {
+        cargarReservas();
     }
 }

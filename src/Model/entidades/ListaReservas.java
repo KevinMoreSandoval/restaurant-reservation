@@ -199,62 +199,84 @@ public class ListaReservas {
             System.out.println("❌ Error al cargar reservas de hoy: " + e.getMessage());
         }
     }
-    //Buscar reserva por dia
-    public List<Reserva> buscarPorDia(String fecha){
+
+    // Buscar reserva por dia
+    public List<Reserva> buscarPorDia(String fecha) {
         List<Reserva> lista = new ArrayList<>();
         NodoReserva actual = cabeza;
-        
-        while (actual!= null) {
-        if(actual.reserva.getFecha().equals(fecha)){
-            lista.add(actual.reserva);
-        
-        }
+
+        while (actual != null) {
+            if (actual.reserva.getFecha().equals(fecha)) {
+                lista.add(actual.reserva);
+
+            }
             actual = actual.siguiente;
         }
-        
+
         return lista;
-        
+
     }
-    //Buscar reservas por mes ()
-    
-    public List<Reserva> buscarPorMes (int mes ,int anio){
-        List<Reserva> lista = new ArrayList<>();    
+    // Buscar reservas por mes ()
+
+    public List<Reserva> buscarPorMes(int mes, int anio) {
+        List<Reserva> lista = new ArrayList<>();
         NodoReserva actual = cabeza;
-        
+
         String mesStr = (mes < 10) ? "0" + mes : String.valueOf(mes);
-        
-        while (actual!=null) {            
-            
+
+        while (actual != null) {
+
             String fecha = actual.reserva.getFecha();
-            if(fecha.startsWith(anio + "-" + mesStr)){
-            lista.add(actual.reserva);
-            
+            if (fecha.startsWith(anio + "-" + mesStr)) {
+                lista.add(actual.reserva);
+
             }
             actual = actual.siguiente;
         }
         return lista;
-        
-        
+
     }
-    
-     public List<Reserva> buscarPorAnio (int anio){
-        List<Reserva> lista = new ArrayList<>();    
+
+    public List<Reserva> buscarPorAnio(int anio) {
+        List<Reserva> lista = new ArrayList<>();
         NodoReserva actual = cabeza;
-        
-        while (actual!=null) {            
-            
+
+        while (actual != null) {
+
             String fecha = actual.reserva.getFecha();
-            if(actual.reserva.getFecha().startsWith(String.valueOf(anio))){
-            lista.add(actual.reserva);
-            
+            if (actual.reserva.getFecha().startsWith(String.valueOf(anio))) {
+                lista.add(actual.reserva);
+
             }
             actual = actual.siguiente;
         }
         return lista;
-        
-        
+
     }
-    
-    
-    
+
+    /**
+     * Actualizar el estado de una reserva en la lista enlazada
+     */
+    public void actualizarEstado(int idReserva, String nuevoEstado) {
+        NodoReserva actual = cabeza;
+
+        while (actual != null) {
+            if (actual.reserva.getId() == idReserva) {
+                actual.reserva.setEstado(nuevoEstado);
+                System.out.println("✅ Estado actualizado en lista enlazada para reserva ID: " + idReserva);
+                return;
+            }
+            actual = actual.siguiente;
+        }
+
+        System.out.println("⚠️ Reserva ID " + idReserva + " no encontrada en lista enlazada");
+    }
+
+    /**
+     * Alias de cargarDesdeBaseDatos() para recargar/sincronizar la lista desde BD
+     */
+    public void recargarDesdeBD() {
+        cargarDesdeBaseDatos();
+    }
+
 }

@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.bd.ConnectionBD;
+import Model.dao.ReservaDAO;
 import Model.entidades.Reserva;
 import Model.entidades.EstadoMesa;
 import Model.entidades.ListaReservas;
@@ -248,6 +249,112 @@ public class ReservaController {
 
         } catch (SQLException e) {
             System.out.println("Error al obtener reservas de hoy desde BD: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    /**
+     * Actualizar el estado de una reserva
+     */
+    public boolean actualizarEstadoReserva(int idReserva, String nuevoEstado) {
+        ReservaDAO dao = new ReservaDAO();
+        boolean actualizado = dao.actualizarEstado(idReserva, nuevoEstado);
+
+        if (actualizado) {
+            // Actualizar en la lista enlazada
+            listaReservas.actualizarEstado(idReserva, nuevoEstado);
+
+            // Actualizar en el árbol
+            arbolReservas.actualizarEstado(idReserva, nuevoEstado);
+
+            System.out.println("✅ Estado actualizado en BD, lista y árbol");
+        }
+
+        return actualizado;
+    }
+
+    /**
+     * Cancelar automáticamente reservas PENDIENTE cuya hora ya pasó
+     */
+    public int cancelarReservasPendientesExpiradas() {
+        int canceladas = 0;
+
+        // Obtener fecha y hora actual
+        java.time.LocalDateTime ahora = java.time.LocalDateTime.now();
+        String fechaHoy = ahora.toLocalDate().toString();
+        String horaActual = ahora.toLocalTime().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
+
+        // Obtener todas las reservas
+        List<Reserva> todasReservas = arbolReservas.obtenerTodasEnOrden();
+
+        for (Reserva r : todasReservas) {
+            // Solo procesar reservas PENDIENTE
+            if (!r.getEstado().equals("PENDIENTE")) {
+                continue;
+            }
+
+            // Verificar si la fecha/hora ya pasó
+            boolean expirada = false;
+
+            if (r.getFecha().compareTo(fechaHoy) < 0) {
+                // Fecha anterior a hoy
+                expirada = true;
+            } else if (r.getFecha().equals(fechaHoy)) {
+                // Misma fecha, verificar hora
+                if (r.getHora().compareTo(horaActual) <= 0) {
+                    expirada = true;
+                }
+            }
+
+            if (expirada) {
+                // Cancelar la reserva
+                if (actualizarEstadoReserva(r.getId(), "CANCELADA")) {
+                    canceladas++;
+                    System.out.println("⏰ Reserva ID " + r.getId() + " cancelada automáticamente (expirada)");
+                }
+            }
+        }
+
+        if (canceladas > 0) {
+            System.out.println("✅ Total de reservas pendientes canceladas: " + canceladas);
+        }
+
+        return canceladas;
+    }
+
+    /**
+     * Obtener reservas registradas hoy (por fecha_registro) desde la BD
+     */
+    public List<Reserva> obtenerReservasRegistradasHoy() {
+        List<Reserva> lista = new ArrayList<>();
+        // Obtener fecha actual en formato yyyy-MM-dd
+        java.time.LocalDate hoy = java.time.LocalDate.now();
+        String fechaHoy = hoy.toString();
+
+        String sql = "SELECT * FROM reservas WHERE DATE(fecha_registro) = ? ORDER BY fecha_registro DESC";
+
+        try (Connection cx = ConnectionBD.conectar();
+                PreparedStatement ps = cx.prepareStatement(sql)) {
+
+            ps.setString(1, fechaHoy);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Reserva r = new Reserva(
+                        rs.getInt("id_reserva"),
+                        rs.getString("nombre_cliente"),
+                        rs.getString("apellido_cliente"),
+                        rs.getString("dni_cliente"),
+                        rs.getString("fecha"),
+                        rs.getString("hora"),
+                        rs.getInt("id_mesa"),
+                        rs.getString("estado"));
+                lista.add(r);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener reservas registradas hoy: " + e.getMessage());
         }
 
         return lista;

@@ -221,4 +221,32 @@ public class ArbolReservas {
             }
         }
     }
+
+    /**
+     * Actualizar el estado de una reserva en el árbol
+     */
+    public void actualizarEstado(int idReserva, String nuevoEstado) {
+        actualizarEstadoRecursivo(raiz, idReserva, nuevoEstado);
+    }
+
+    private boolean actualizarEstadoRecursivo(NodoArbolReserva nodo, int idReserva, String nuevoEstado) {
+        if (nodo == null) {
+            return false;
+        }
+
+        // Buscar en las reservas de este nodo
+        for (Reserva r : nodo.getReservas()) {
+            if (r.getId() == idReserva) {
+                r.setEstado(nuevoEstado);
+                System.out.println("✅ Estado actualizado en árbol para reserva ID: " + idReserva);
+                return true;
+            }
+        }
+
+        // Buscar en subárboles
+        if (actualizarEstadoRecursivo(nodo.izquierdo, idReserva, nuevoEstado)) {
+            return true;
+        }
+        return actualizarEstadoRecursivo(nodo.derecho, idReserva, nuevoEstado);
+    }
 }
