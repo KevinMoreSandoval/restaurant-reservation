@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="View">
+  <ClassDiagramComponents>
+    <Class name="CambiarEstadoDialog" package="View" visibility="public" xPosition="20.0" yPosition="8.0">
+      <Fields>
+        <Field name="reserva" type="Reserva" visibility="private" isFinal="true"/>
+        <Field name="controller" type="ReservaController" visibility="private" isFinal="true"/>
+        <Field name="parentView" type="RefrescableView" visibility="private" isFinal="true"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_SUCCESS" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_DANGER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WARNING" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="JFrame" name="parent"/>
+          <Argument type="Reserva" name="reserva"/>
+          <Argument type="ReservaController" name="controller"/>
+          <Argument type="RefrescableView" name="parentView"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private"/>
+        <Method name="crearLabel" returnType="JLabel" visibility="private">
+          <Argument type="String" name="texto"/>
+        </Method>
+        <Method name="crearLabelEstado" returnType="JLabel" visibility="private">
+          <Argument type="String" name="estado"/>
+        </Method>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="cambiarEstado" returnType="void" visibility="private">
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="LoginView" package="View" visibility="public" xPosition="79.0" yPosition="1107.0">
+      <Fields>
+        <Field name="txtUsuario" type="JTextField" visibility="private"/>
+        <Field name="txtPassword" type="JPasswordField" visibility="private"/>
+        <Field name="btnLogin" type="JButton" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_PRIMARY_HOVER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_ACCENT" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BACKGROUND" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_TEXT" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_TEXT_LIGHT" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BORDER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="onLoginSuccess" type="Runnable" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="setOnLoginSuccess" returnType="void" visibility="public">
+          <Argument type="Runnable" name="callback"/>
+        </Method>
+        <Method name="configurarVentana" returnType="void" visibility="private"/>
+        <Method name="inicializarComponentes" returnType="void" visibility="private"/>
+        <Method name="iniciarSesion" returnType="void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="Panel" package="View" visibility="public" xPosition="45.0" yPosition="440.0">
+      <Fields>
+        <Field name="btnRegistrar" type="JButton" visibility="private"/>
+        <Field name="btnVerificar" type="JButton" visibility="private"/>
+        <Field name="btnReservasHoy" type="JButton" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_TEXT_LIGHT" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BORDER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_CARD_BG" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_1" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_1_HOVER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_2" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_2_HOVER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_3" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_3_HOVER" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="inicializarComponentes" returnType="void" visibility="private"/>
+        <Method name="paintComponent" returnType="void" visibility="protected">
+          <Argument type="Graphics" name="g"/>
+        </Method>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="titulo"/>
+          <Argument type="String" name="descripcion"/>
+          <Argument type="Color" name="colorBase"/>
+          <Argument type="Color" name="colorHover"/>
+          <Argument type="String" name="icono"/>
+        </Method>
+        <Method name="getBtnRegistrar" returnType="JButton" visibility="public"/>
+        <Method name="getBtnVerificar" returnType="JButton" visibility="public"/>
+        <Method name="getBtnReservasHoy" returnType="JButton" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="RegistrarReservaView" package="View" visibility="public" xPosition="598.0" yPosition="977.0">
+      <Fields>
+        <Field name="reservaController" type="ReservaController" visibility="private" isFinal="true"/>
+        <Field name="mesaController" type="MesaController" visibility="private" isFinal="true"/>
+        <Field name="txtNombre" type="JTextField" visibility="private"/>
+        <Field name="txtApellido" type="JTextField" visibility="private"/>
+        <Field name="txtDni" type="JTextField" visibility="private"/>
+        <Field name="dateChooser" type="JDateChooser" visibility="private"/>
+        <Field name="spnNumPersonas" type="JSpinner" visibility="private"/>
+        <Field name="cmbHorario" type="JComboBox&lt;String&gt;" visibility="private"/>
+        <Field name="cmbMesa" type="JComboBox&lt;Mesa&gt;" visibility="private"/>
+        <Field name="btnRegistrar" type="JButton" visibility="private"/>
+        <Field name="btnLimpiar" type="JButton" visibility="private"/>
+        <Field name="btnFiltrarMesas" type="JButton" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_SUCCESS" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_DANGER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_INFO" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BG" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_TEXT" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="EstadoMesasManager" name="estadosManager"/>
+          <Argument type="ListaReservas" name="listaReservas"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private"/>
+        <Method name="crearPanelTitulo" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelFormulario" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelBotones" returnType="JPanel" visibility="private"/>
+        <Method name="crearLabel" returnType="JLabel" visibility="private">
+          <Argument type="String" name="texto"/>
+        </Method>
+        <Method name="crearTextField" returnType="JTextField" visibility="private"/>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="cargarMesas" returnType="void" visibility="private"/>
+        <Method name="filtrarMesasPorCapacidad" returnType="void" visibility="private"/>
+        <Method name="registrarReserva" returnType="void" visibility="private"/>
+        <Method name="validarCampos" returnType="boolean" visibility="private"/>
+        <Method name="limpiarFormulario" returnType="void" visibility="private"/>
+        <Method name="actualizarHorarios" returnType="void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="ReservasHoyView" package="View" visibility="public" xPosition="732.0" yPosition="233.0">
+      <Fields>
+        <Field name="reservaController" type="ReservaController" visibility="private" isFinal="true"/>
+        <Field name="reservasActuales" type="List&lt;Reserva&gt;" visibility="private"/>
+        <Field name="tableReservas" type="JTable" visibility="private"/>
+        <Field name="modeloTabla" type="DefaultTableModel" visibility="private"/>
+        <Field name="btnVolver" type="JButton" visibility="private"/>
+        <Field name="btnActualizar" type="JButton" visibility="private"/>
+        <Field name="lblTotal" type="JLabel" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BG" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_SUCCESS" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_DANGER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BORDER" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="EstadoMesasManager" name="estadosManager"/>
+          <Argument type="ListaReservas" name="listaReservas"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private"/>
+        <Method name="crearPanelTitulo" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelCentral" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelInferior" returnType="JPanel" visibility="private"/>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="getBtnVolver" returnType="JButton" visibility="public"/>
+        <Method name="cargarReservas" returnType="void" visibility="private"/>
+        <Method name="refrescarTabla" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="VerificarReservaView" package="View" visibility="public" xPosition="1287.0" yPosition="676.0">
+      <Fields>
+        <Field name="reservaController" type="ReservaController" visibility="private" isFinal="true"/>
+        <Field name="reservasActuales" type="List&lt;Reserva&gt;" visibility="private"/>
+        <Field name="dateChooser" type="JDateChooser" visibility="private"/>
+        <Field name="btnBuscarFecha" type="JButton" visibility="private"/>
+        <Field name="btnReservasHoy" type="JButton" visibility="private"/>
+        <Field name="btnEditar" type="JButton" visibility="private"/>
+        <Field name="tableResultados" type="JTable" visibility="private"/>
+        <Field name="modeloTabla" type="DefaultTableModel" visibility="private"/>
+        <Field name="lblTotalReservas" type="JLabel" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_SUCCESS" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_INFO" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WARNING" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BG" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BORDER" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="EstadoMesasManager" name="estadosManager"/>
+          <Argument type="ListaReservas" name="listaReservas"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private"/>
+        <Method name="crearPanelTitulo" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelCentral" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelBusqueda" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelResultados" returnType="JPanel" visibility="private"/>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="getBtnReservasHoy" returnType="JButton" visibility="public"/>
+        <Method name="buscarPorFecha" returnType="void" visibility="private"/>
+        <Method name="mostrarReservasEnTabla" returnType="void" visibility="private">
+          <Argument type="List&lt;Reserva&gt;" name="reservas"/>
+        </Method>
+        <Method name="editarReservaSeleccionada" returnType="void" visibility="private"/>
+        <Method name="formatearEstado" returnType="String" visibility="private">
+          <Argument type="String" name="estado"/>
+        </Method>
+        <Method name="refrescarTabla" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Interface name="RefrescableView" package="View" visibility="public" xPosition="1404.0" yPosition="40.0">
+      <Methods>
+        <Method name="refrescarTabla" returnType="void" visibility="package"/>
+      </Methods>
+    </Interface>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="View.VerificarReservaView" target="View.Panel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="parentView" source="View.CambiarEstadoDialog" target="View.RefrescableView" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="View.VerificarReservaView" target="View.RefrescableView"/>
+    <UseRelation source="View.RegistrarReservaView" target="View.Panel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="View.ReservasHoyView" target="View.RefrescableView"/>
+    <UseRelation source="View.ReservasHoyView" target="View.Panel" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Multi-package class diagram">
+  <ClassDiagramComponents>
+    <Class name="ConnectionBD" package="Model.bd" visibility="public" xPosition="620.0" yPosition="20.0">
+      <Fields>
+        <Field name="URL" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="USER" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="PASS" type="String" visibility="private" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="conectar" returnType="Connection" visibility="public" isStatic="true"/>
+      </Methods>
+    </Class>
+    <Class name="AdministradorDAO" package="Model.dao" visibility="public" xPosition="904.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="validarLogin" returnType="boolean" visibility="public">
+          <Argument type="String" name="usuario"/>
+          <Argument type="String" name="password"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MesaDAO" package="Model.dao" visibility="public" xPosition="1280.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="listarMesas" returnType="ArrayList&lt;Mesa&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ReservaDAO" package="Model.dao" visibility="public" xPosition="1520.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="registrarReserva" returnType="boolean" visibility="public">
+          <Argument type="Reserva" name="r"/>
+        </Method>
+        <Method name="actualizarEstado" returnType="boolean" visibility="public">
+          <Argument type="int" name="idReserva"/>
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Admin" package="Model.entidades" visibility="public" xPosition="2349.0" yPosition="2.0">
+      <Fields>
+        <Field name="id" type="int" visibility="private"/>
+        <Field name="usuario" type="String" visibility="private"/>
+        <Field name="password" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="int" name="id"/>
+          <Argument type="String" name="usuario"/>
+          <Argument type="String" name="password"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getId" returnType="int" visibility="public"/>
+        <Method name="setId" returnType="void" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="getUsuario" returnType="String" visibility="public"/>
+        <Method name="setUsuario" returnType="void" visibility="public">
+          <Argument type="String" name="usuario"/>
+        </Method>
+        <Method name="getPassword" returnType="String" visibility="public"/>
+        <Method name="setPassword" returnType="void" visibility="public">
+          <Argument type="String" name="password"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="ArbolReservas" package="Model.entidades" visibility="public" xPosition="2887.0" yPosition="20.0">
+      <Fields>
+        <Field name="raiz" type="NodoArbolReserva" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="insertar" returnType="void" visibility="public">
+          <Argument type="Reserva" name="reserva"/>
+        </Method>
+        <Method name="insertarRecursivo" returnType="NodoArbolReserva" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="Reserva" name="reserva"/>
+        </Method>
+        <Method name="buscarPorFecha" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="buscarNodoRecursivo" returnType="NodoArbolReserva" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="obtenerReservasDeHoy" returnType="List&lt;Reserva&gt;" visibility="public"/>
+        <Method name="existeReserva" returnType="boolean" visibility="public">
+          <Argument type="String" name="fecha"/>
+          <Argument type="int" name="idMesa"/>
+          <Argument type="String" name="horario"/>
+        </Method>
+        <Method name="obtenerTodasEnOrden" returnType="List&lt;Reserva&gt;" visibility="public"/>
+        <Method name="inOrderRecursivo" returnType="void" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="List&lt;Reserva&gt;" name="lista"/>
+        </Method>
+        <Method name="cargarDesdeBaseDatos" returnType="void" visibility="public"/>
+        <Method name="contarReservas" returnType="int" visibility="public"/>
+        <Method name="contarRecursivo" returnType="int" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+        </Method>
+        <Method name="estaVacio" returnType="boolean" visibility="public"/>
+        <Method name="mostrarEstructura" returnType="void" visibility="public"/>
+        <Method name="mostrarRecursivo" returnType="void" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="String" name="prefijo"/>
+          <Argument type="boolean" name="esUltimo"/>
+        </Method>
+        <Method name="actualizarEstado" returnType="void" visibility="public">
+          <Argument type="int" name="idReserva"/>
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+        <Method name="actualizarEstadoRecursivo" returnType="boolean" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="int" name="idReserva"/>
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="ListaReservas" package="Model.entidades" visibility="public" xPosition="1143.0" yPosition="361.0">
+      <Fields>
+        <Field name="cabeza" type="NodoReserva" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="agregar" returnType="void" visibility="public">
+          <Argument type="Reserva" name="reserva"/>
+        </Method>
+        <Method name="obtenerTodas" returnType="List&lt;Reserva&gt;" visibility="public"/>
+        <Method name="buscarPorFecha" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="buscarPorDni" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="String" name="dni"/>
+        </Method>
+        <Method name="buscarPorMesa" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="int" name="idMesa"/>
+        </Method>
+        <Method name="contar" returnType="int" visibility="public"/>
+        <Method name="estaVacia" returnType="boolean" visibility="public"/>
+        <Method name="mostrarReservas" returnType="void" visibility="public"/>
+        <Method name="cargarDesdeBaseDatos" returnType="void" visibility="public"/>
+        <Method name="cargarReservasDeHoyDesdeBD" returnType="void" visibility="public"/>
+        <Method name="buscarPorDia" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="buscarPorMes" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="int" name="mes"/>
+          <Argument type="int" name="anio"/>
+        </Method>
+        <Method name="buscarPorAnio" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="int" name="anio"/>
+        </Method>
+        <Method name="actualizarEstado" returnType="void" visibility="public">
+          <Argument type="int" name="idReserva"/>
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+        <Method name="recargarDesdeBD" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Mesa" package="Model.entidades" visibility="public" xPosition="337.0" yPosition="608.0">
+      <Fields>
+        <Field name="idMesa" type="int" visibility="private"/>
+        <Field name="capacidad" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="idMesa"/>
+          <Argument type="int" name="capacidad"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getIdMesa" returnType="int" visibility="public"/>
+        <Method name="setIdMesa" returnType="void" visibility="public">
+          <Argument type="int" name="idMesa"/>
+        </Method>
+        <Method name="getCapacidad" returnType="int" visibility="public"/>
+        <Method name="setCapacidad" returnType="void" visibility="public">
+          <Argument type="int" name="capacidad"/>
+        </Method>
+        <Method name="toString" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="NodoArbolReserva" package="Model.entidades" visibility="public" xPosition="3659.0" yPosition="1434.0">
+      <Fields>
+        <Field name="fecha" type="String" visibility="private"/>
+        <Field name="reservas" type="List&lt;Reserva&gt;" visibility="private"/>
+        <Field name="izquierdo" type="NodoArbolReserva" visibility="public"/>
+        <Field name="derecho" type="NodoArbolReserva" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="agregarReserva" returnType="void" visibility="public">
+          <Argument type="Reserva" name="reserva"/>
+        </Method>
+        <Method name="getFecha" returnType="String" visibility="public"/>
+        <Method name="getReservas" returnType="List&lt;Reserva&gt;" visibility="public"/>
+        <Method name="getCantidadReservas" returnType="int" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="NodoReserva" package="Model.entidades" visibility="public" xPosition="1670.0" yPosition="399.0">
+      <Fields>
+        <Field name="reserva" type="Reserva" visibility="public"/>
+        <Field name="siguiente" type="NodoReserva" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Reserva" name="reserva"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="Reserva" package="Model.entidades" visibility="public" xPosition="3610.0" yPosition="579.0">
+      <Fields>
+        <Field name="id" type="int" visibility="private"/>
+        <Field name="nombreCliente" type="String" visibility="private"/>
+        <Field name="apellidoCliente" type="String" visibility="private"/>
+        <Field name="dniCliente" type="String" visibility="private"/>
+        <Field name="fecha" type="String" visibility="private"/>
+        <Field name="hora" type="String" visibility="private"/>
+        <Field name="idMesa" type="int" visibility="private"/>
+        <Field name="estado" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="id"/>
+          <Argument type="String" name="nombreCliente"/>
+          <Argument type="String" name="apellidoCliente"/>
+          <Argument type="String" name="dniCliente"/>
+          <Argument type="String" name="fecha"/>
+          <Argument type="String" name="hora"/>
+          <Argument type="int" name="idMesa"/>
+          <Argument type="String" name="estado"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="nombreCliente"/>
+          <Argument type="String" name="apellidoCliente"/>
+          <Argument type="String" name="dniCliente"/>
+          <Argument type="String" name="fecha"/>
+          <Argument type="String" name="hora"/>
+          <Argument type="int" name="idMesa"/>
+          <Argument type="String" name="estado"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getId" returnType="int" visibility="public"/>
+        <Method name="setId" returnType="void" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="getNombreCliente" returnType="String" visibility="public"/>
+        <Method name="setNombreCliente" returnType="void" visibility="public">
+          <Argument type="String" name="nombreCliente"/>
+        </Method>
+        <Method name="getApellidoCliente" returnType="String" visibility="public"/>
+        <Method name="setApellidoCliente" returnType="void" visibility="public">
+          <Argument type="String" name="apellidoCliente"/>
+        </Method>
+        <Method name="getDniCliente" returnType="String" visibility="public"/>
+        <Method name="setDniCliente" returnType="void" visibility="public">
+          <Argument type="String" name="dniCliente"/>
+        </Method>
+        <Method name="getFecha" returnType="String" visibility="public"/>
+        <Method name="setFecha" returnType="void" visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="getHora" returnType="String" visibility="public"/>
+        <Method name="setHora" returnType="void" visibility="public">
+          <Argument type="String" name="hora"/>
+        </Method>
+        <Method name="getIdMesa" returnType="int" visibility="public"/>
+        <Method name="setIdMesa" returnType="void" visibility="public">
+          <Argument type="int" name="idMesa"/>
+        </Method>
+        <Method name="getEstado" returnType="String" visibility="public"/>
+        <Method name="setEstado" returnType="void" visibility="public">
+          <Argument type="String" name="estado"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="EstadoMesasManager" package="Model.services" visibility="public" xPosition="214.0" yPosition="202.0">
+      <Fields>
+        <Field name="mapa" type="HashMap&lt;String, HashMap&lt;Integer, HashMap&lt;String, EstadoMesa&gt;&gt;&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="setEstado" returnType="void" visibility="public">
+          <Argument type="String" name="fecha"/>
+          <Argument type="int" name="idMesa"/>
+          <Argument type="String" name="horario"/>
+          <Argument type="EstadoMesa" name="estadoMesa"/>
+        </Method>
+        <Method name="getEstado" returnType="EstadoMesa" visibility="public">
+          <Argument type="String" name="fecha"/>
+          <Argument type="int" name="idMesa"/>
+          <Argument type="String" name="horario"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="CambiarEstadoDialog" package="View" visibility="public" xPosition="1590.0" yPosition="859.0">
+      <Fields>
+        <Field name="reserva" type="Reserva" visibility="private" isFinal="true"/>
+        <Field name="controller" type="ReservaController" visibility="private" isFinal="true"/>
+        <Field name="parentView" type="RefrescableView" visibility="private" isFinal="true"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_SUCCESS" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_DANGER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WARNING" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="JFrame" name="parent"/>
+          <Argument type="Reserva" name="reserva"/>
+          <Argument type="ReservaController" name="controller"/>
+          <Argument type="RefrescableView" name="parentView"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private"/>
+        <Method name="crearLabel" returnType="JLabel" visibility="private">
+          <Argument type="String" name="texto"/>
+        </Method>
+        <Method name="crearLabelEstado" returnType="JLabel" visibility="private">
+          <Argument type="String" name="estado"/>
+        </Method>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="cambiarEstado" returnType="void" visibility="private">
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="LoginView" package="View" visibility="public" xPosition="7.0" yPosition="1085.0">
+      <Fields>
+        <Field name="txtUsuario" type="JTextField" visibility="private"/>
+        <Field name="txtPassword" type="JPasswordField" visibility="private"/>
+        <Field name="btnLogin" type="JButton" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_PRIMARY_HOVER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_ACCENT" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BACKGROUND" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_TEXT" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_TEXT_LIGHT" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BORDER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="onLoginSuccess" type="Runnable" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="setOnLoginSuccess" returnType="void" visibility="public">
+          <Argument type="Runnable" name="callback"/>
+        </Method>
+        <Method name="configurarVentana" returnType="void" visibility="private"/>
+        <Method name="inicializarComponentes" returnType="void" visibility="private"/>
+        <Method name="iniciarSesion" returnType="void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="Panel" package="View" visibility="public" xPosition="313.0" yPosition="1951.0">
+      <Fields>
+        <Field name="btnRegistrar" type="JButton" visibility="private"/>
+        <Field name="btnVerificar" type="JButton" visibility="private"/>
+        <Field name="btnReservasHoy" type="JButton" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_TEXT_LIGHT" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BORDER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_CARD_BG" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_1" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_1_HOVER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_2" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_2_HOVER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_3" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BTN_3_HOVER" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="inicializarComponentes" returnType="void" visibility="private"/>
+        <Method name="paintComponent" returnType="void" visibility="protected">
+          <Argument type="Graphics" name="g"/>
+        </Method>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="titulo"/>
+          <Argument type="String" name="descripcion"/>
+          <Argument type="Color" name="colorBase"/>
+          <Argument type="Color" name="colorHover"/>
+          <Argument type="String" name="icono"/>
+        </Method>
+        <Method name="getBtnRegistrar" returnType="JButton" visibility="public"/>
+        <Method name="getBtnVerificar" returnType="JButton" visibility="public"/>
+        <Method name="getBtnReservasHoy" returnType="JButton" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="RegistrarReservaView" package="View" visibility="public" xPosition="313.0" yPosition="1135.0">
+      <Fields>
+        <Field name="reservaController" type="ReservaController" visibility="private" isFinal="true"/>
+        <Field name="mesaController" type="MesaController" visibility="private" isFinal="true"/>
+        <Field name="txtNombre" type="JTextField" visibility="private"/>
+        <Field name="txtApellido" type="JTextField" visibility="private"/>
+        <Field name="txtDni" type="JTextField" visibility="private"/>
+        <Field name="dateChooser" type="JDateChooser" visibility="private"/>
+        <Field name="spnNumPersonas" type="JSpinner" visibility="private"/>
+        <Field name="cmbHorario" type="JComboBox&lt;String&gt;" visibility="private"/>
+        <Field name="cmbMesa" type="JComboBox&lt;Mesa&gt;" visibility="private"/>
+        <Field name="btnRegistrar" type="JButton" visibility="private"/>
+        <Field name="btnLimpiar" type="JButton" visibility="private"/>
+        <Field name="btnFiltrarMesas" type="JButton" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_SUCCESS" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_DANGER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_INFO" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BG" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_TEXT" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="EstadoMesasManager" name="estadosManager"/>
+          <Argument type="ListaReservas" name="listaReservas"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private"/>
+        <Method name="crearPanelTitulo" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelFormulario" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelBotones" returnType="JPanel" visibility="private"/>
+        <Method name="crearLabel" returnType="JLabel" visibility="private">
+          <Argument type="String" name="texto"/>
+        </Method>
+        <Method name="crearTextField" returnType="JTextField" visibility="private"/>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="cargarMesas" returnType="void" visibility="private"/>
+        <Method name="filtrarMesasPorCapacidad" returnType="void" visibility="private"/>
+        <Method name="registrarReserva" returnType="void" visibility="private"/>
+        <Method name="validarCampos" returnType="boolean" visibility="private"/>
+        <Method name="limpiarFormulario" returnType="void" visibility="private"/>
+        <Method name="actualizarHorarios" returnType="void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="ReservasHoyView" package="View" visibility="public" xPosition="1884.0" yPosition="1913.0">
+      <Fields>
+        <Field name="reservaController" type="ReservaController" visibility="private" isFinal="true"/>
+        <Field name="reservasActuales" type="List&lt;Reserva&gt;" visibility="private"/>
+        <Field name="tableReservas" type="JTable" visibility="private"/>
+        <Field name="modeloTabla" type="DefaultTableModel" visibility="private"/>
+        <Field name="btnVolver" type="JButton" visibility="private"/>
+        <Field name="btnActualizar" type="JButton" visibility="private"/>
+        <Field name="lblTotal" type="JLabel" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BG" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_SUCCESS" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_DANGER" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BORDER" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="EstadoMesasManager" name="estadosManager"/>
+          <Argument type="ListaReservas" name="listaReservas"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private"/>
+        <Method name="crearPanelTitulo" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelCentral" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelInferior" returnType="JPanel" visibility="private"/>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="getBtnVolver" returnType="JButton" visibility="public"/>
+        <Method name="cargarReservas" returnType="void" visibility="private"/>
+        <Method name="refrescarTabla" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="VerificarReservaView" package="View" visibility="public" xPosition="1004.0" yPosition="1536.0">
+      <Fields>
+        <Field name="reservaController" type="ReservaController" visibility="private" isFinal="true"/>
+        <Field name="reservasActuales" type="List&lt;Reserva&gt;" visibility="private"/>
+        <Field name="dateChooser" type="JDateChooser" visibility="private"/>
+        <Field name="btnBuscarFecha" type="JButton" visibility="private"/>
+        <Field name="btnReservasHoy" type="JButton" visibility="private"/>
+        <Field name="btnEditar" type="JButton" visibility="private"/>
+        <Field name="tableResultados" type="JTable" visibility="private"/>
+        <Field name="modeloTabla" type="DefaultTableModel" visibility="private"/>
+        <Field name="lblTotalReservas" type="JLabel" visibility="private"/>
+        <Field name="COLOR_PRIMARY" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_SUCCESS" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_INFO" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WARNING" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BG" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_WHITE" type="Color" visibility="private" isFinal="true"/>
+        <Field name="COLOR_BORDER" type="Color" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="EstadoMesasManager" name="estadosManager"/>
+          <Argument type="ListaReservas" name="listaReservas"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private"/>
+        <Method name="crearPanelTitulo" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelCentral" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelBusqueda" returnType="JPanel" visibility="private"/>
+        <Method name="crearPanelResultados" returnType="JPanel" visibility="private"/>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="getBtnReservasHoy" returnType="JButton" visibility="public"/>
+        <Method name="buscarPorFecha" returnType="void" visibility="private"/>
+        <Method name="mostrarReservasEnTabla" returnType="void" visibility="private">
+          <Argument type="List&lt;Reserva&gt;" name="reservas"/>
+        </Method>
+        <Method name="editarReservaSeleccionada" returnType="void" visibility="private"/>
+        <Method name="formatearEstado" returnType="String" visibility="private">
+          <Argument type="String" name="estado"/>
+        </Method>
+        <Method name="refrescarTabla" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Interface name="RefrescableView" package="View" visibility="public" xPosition="886.0" yPosition="988.0">
+      <Methods>
+        <Method name="refrescarTabla" returnType="void" visibility="package"/>
+      </Methods>
+    </Interface>
+    <Enum name="EstadoMesa" package="Model.entidades" visibility="public" xPosition="17.0" yPosition="62.0">
+      <Literals>
+        <Literal name="LIBRE"/>
+        <Literal name="RESERVADA"/>
+        <Literal name="OCUPADA"/>
+      </Literals>
+    </Enum>
+    <Enum name="EstadoReserva" package="Model.entidades" visibility="public" xPosition="17.0" yPosition="232.0">
+      <Literals>
+        <Literal name="PENDIENTE"/>
+        <Literal name="CONFIRMADA"/>
+        <Literal name="CANCELADA"/>
+      </Literals>
+    </Enum>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="View.RegistrarReservaView" target="View.Panel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="raiz" source="Model.entidades.ArbolReservas" target="Model.entidades.NodoArbolReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="reservas" source="Model.entidades.NodoArbolReserva" target="Model.entidades.Reserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Reserva&gt;"/>
+    <HasRelation name="cmbMesa" source="View.RegistrarReservaView" target="Model.entidades.Mesa" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Model.entidades.NodoArbolReserva" target="Model.entidades.Reserva" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="cabeza" source="Model.entidades.ListaReservas" target="Model.entidades.NodoReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="derecho" source="Model.entidades.NodoArbolReserva" target="Model.entidades.NodoArbolReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="izquierdo" source="Model.entidades.NodoArbolReserva" target="Model.entidades.NodoArbolReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Model.entidades.ListaReservas" target="Model.entidades.Reserva" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="View.ReservasHoyView" target="View.RefrescableView"/>
+    <HasRelation name="parentView" source="View.CambiarEstadoDialog" target="View.RefrescableView" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="reserva" source="Model.entidades.NodoReserva" target="Model.entidades.Reserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="reserva" source="View.CambiarEstadoDialog" target="Model.entidades.Reserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Model.services.EstadoMesasManager" target="Model.entidades.Mesa" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Model.entidades.ArbolReservas" target="Model.entidades.Reserva" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Model.dao.MesaDAO" target="Model.entidades.Mesa" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="View.VerificarReservaView" target="View.Panel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="View.VerificarReservaView" target="Model.entidades.Reserva" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="View.ReservasHoyView" target="View.Panel" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="mapa" source="Model.services.EstadoMesasManager" target="Model.entidades.EstadoMesa" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="HashMap&lt;String, HashMap&lt;Integer, HashMap&lt;String, EstadoMesa&gt;&gt;&gt;"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="View.VerificarReservaView" target="View.RefrescableView"/>
+    <HasRelation name="reservasActuales" source="View.VerificarReservaView" target="Model.entidades.Reserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Reserva&gt;"/>
+    <HasRelation name="siguiente" source="Model.entidades.NodoReserva" target="Model.entidades.NodoReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="reservasActuales" source="View.ReservasHoyView" target="Model.entidades.Reserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Reserva&gt;"/>
+    <UseRelation source="Model.dao.ReservaDAO" target="Model.entidades.Reserva" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

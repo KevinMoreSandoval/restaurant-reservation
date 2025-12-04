@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Model.entidades">
+  <ClassDiagramComponents>
+    <Class name="Admin" package="Model.entidades" visibility="public" xPosition="1038.0" yPosition="989.0">
+      <Fields>
+        <Field name="id" type="int" visibility="private"/>
+        <Field name="usuario" type="String" visibility="private"/>
+        <Field name="password" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="int" name="id"/>
+          <Argument type="String" name="usuario"/>
+          <Argument type="String" name="password"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getId" returnType="int" visibility="public"/>
+        <Method name="setId" returnType="void" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="getUsuario" returnType="String" visibility="public"/>
+        <Method name="setUsuario" returnType="void" visibility="public">
+          <Argument type="String" name="usuario"/>
+        </Method>
+        <Method name="getPassword" returnType="String" visibility="public"/>
+        <Method name="setPassword" returnType="void" visibility="public">
+          <Argument type="String" name="password"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="ArbolReservas" package="Model.entidades" visibility="public" xPosition="48.0" yPosition="923.0">
+      <Fields>
+        <Field name="raiz" type="NodoArbolReserva" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="insertar" returnType="void" visibility="public">
+          <Argument type="Reserva" name="reserva"/>
+        </Method>
+        <Method name="insertarRecursivo" returnType="NodoArbolReserva" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="Reserva" name="reserva"/>
+        </Method>
+        <Method name="buscarPorFecha" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="buscarNodoRecursivo" returnType="NodoArbolReserva" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="obtenerReservasDeHoy" returnType="List&lt;Reserva&gt;" visibility="public"/>
+        <Method name="existeReserva" returnType="boolean" visibility="public">
+          <Argument type="String" name="fecha"/>
+          <Argument type="int" name="idMesa"/>
+          <Argument type="String" name="horario"/>
+        </Method>
+        <Method name="obtenerTodasEnOrden" returnType="List&lt;Reserva&gt;" visibility="public"/>
+        <Method name="inOrderRecursivo" returnType="void" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="List&lt;Reserva&gt;" name="lista"/>
+        </Method>
+        <Method name="cargarDesdeBaseDatos" returnType="void" visibility="public"/>
+        <Method name="contarReservas" returnType="int" visibility="public"/>
+        <Method name="contarRecursivo" returnType="int" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+        </Method>
+        <Method name="estaVacio" returnType="boolean" visibility="public"/>
+        <Method name="mostrarEstructura" returnType="void" visibility="public"/>
+        <Method name="mostrarRecursivo" returnType="void" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="String" name="prefijo"/>
+          <Argument type="boolean" name="esUltimo"/>
+        </Method>
+        <Method name="actualizarEstado" returnType="void" visibility="public">
+          <Argument type="int" name="idReserva"/>
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+        <Method name="actualizarEstadoRecursivo" returnType="boolean" visibility="private">
+          <Argument type="NodoArbolReserva" name="nodo"/>
+          <Argument type="int" name="idReserva"/>
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="ListaReservas" package="Model.entidades" visibility="public" xPosition="865.0" yPosition="242.0">
+      <Fields>
+        <Field name="cabeza" type="NodoReserva" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="agregar" returnType="void" visibility="public">
+          <Argument type="Reserva" name="reserva"/>
+        </Method>
+        <Method name="obtenerTodas" returnType="List&lt;Reserva&gt;" visibility="public"/>
+        <Method name="buscarPorFecha" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="buscarPorDni" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="String" name="dni"/>
+        </Method>
+        <Method name="buscarPorMesa" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="int" name="idMesa"/>
+        </Method>
+        <Method name="contar" returnType="int" visibility="public"/>
+        <Method name="estaVacia" returnType="boolean" visibility="public"/>
+        <Method name="mostrarReservas" returnType="void" visibility="public"/>
+        <Method name="cargarDesdeBaseDatos" returnType="void" visibility="public"/>
+        <Method name="cargarReservasDeHoyDesdeBD" returnType="void" visibility="public"/>
+        <Method name="buscarPorDia" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="buscarPorMes" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="int" name="mes"/>
+          <Argument type="int" name="anio"/>
+        </Method>
+        <Method name="buscarPorAnio" returnType="List&lt;Reserva&gt;" visibility="public">
+          <Argument type="int" name="anio"/>
+        </Method>
+        <Method name="actualizarEstado" returnType="void" visibility="public">
+          <Argument type="int" name="idReserva"/>
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+        <Method name="recargarDesdeBD" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Mesa" package="Model.entidades" visibility="public" xPosition="1358.0" yPosition="989.0">
+      <Fields>
+        <Field name="idMesa" type="int" visibility="private"/>
+        <Field name="capacidad" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="idMesa"/>
+          <Argument type="int" name="capacidad"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getIdMesa" returnType="int" visibility="public"/>
+        <Method name="setIdMesa" returnType="void" visibility="public">
+          <Argument type="int" name="idMesa"/>
+        </Method>
+        <Method name="getCapacidad" returnType="int" visibility="public"/>
+        <Method name="setCapacidad" returnType="void" visibility="public">
+          <Argument type="int" name="capacidad"/>
+        </Method>
+        <Method name="toString" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="NodoArbolReserva" package="Model.entidades" visibility="public" xPosition="673.0" yPosition="1008.0">
+      <Fields>
+        <Field name="fecha" type="String" visibility="private"/>
+        <Field name="reservas" type="List&lt;Reserva&gt;" visibility="private"/>
+        <Field name="izquierdo" type="NodoArbolReserva" visibility="public"/>
+        <Field name="derecho" type="NodoArbolReserva" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="agregarReserva" returnType="void" visibility="public">
+          <Argument type="Reserva" name="reserva"/>
+        </Method>
+        <Method name="getFecha" returnType="String" visibility="public"/>
+        <Method name="getReservas" returnType="List&lt;Reserva&gt;" visibility="public"/>
+        <Method name="getCantidadReservas" returnType="int" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="NodoReserva" package="Model.entidades" visibility="public" xPosition="1196.0" yPosition="34.0">
+      <Fields>
+        <Field name="reserva" type="Reserva" visibility="public"/>
+        <Field name="siguiente" type="NodoReserva" visibility="public"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Reserva" name="reserva"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="Reserva" package="Model.entidades" visibility="public" xPosition="13.0" yPosition="52.0">
+      <Fields>
+        <Field name="id" type="int" visibility="private"/>
+        <Field name="nombreCliente" type="String" visibility="private"/>
+        <Field name="apellidoCliente" type="String" visibility="private"/>
+        <Field name="dniCliente" type="String" visibility="private"/>
+        <Field name="fecha" type="String" visibility="private"/>
+        <Field name="hora" type="String" visibility="private"/>
+        <Field name="idMesa" type="int" visibility="private"/>
+        <Field name="estado" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="id"/>
+          <Argument type="String" name="nombreCliente"/>
+          <Argument type="String" name="apellidoCliente"/>
+          <Argument type="String" name="dniCliente"/>
+          <Argument type="String" name="fecha"/>
+          <Argument type="String" name="hora"/>
+          <Argument type="int" name="idMesa"/>
+          <Argument type="String" name="estado"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="nombreCliente"/>
+          <Argument type="String" name="apellidoCliente"/>
+          <Argument type="String" name="dniCliente"/>
+          <Argument type="String" name="fecha"/>
+          <Argument type="String" name="hora"/>
+          <Argument type="int" name="idMesa"/>
+          <Argument type="String" name="estado"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getId" returnType="int" visibility="public"/>
+        <Method name="setId" returnType="void" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="getNombreCliente" returnType="String" visibility="public"/>
+        <Method name="setNombreCliente" returnType="void" visibility="public">
+          <Argument type="String" name="nombreCliente"/>
+        </Method>
+        <Method name="getApellidoCliente" returnType="String" visibility="public"/>
+        <Method name="setApellidoCliente" returnType="void" visibility="public">
+          <Argument type="String" name="apellidoCliente"/>
+        </Method>
+        <Method name="getDniCliente" returnType="String" visibility="public"/>
+        <Method name="setDniCliente" returnType="void" visibility="public">
+          <Argument type="String" name="dniCliente"/>
+        </Method>
+        <Method name="getFecha" returnType="String" visibility="public"/>
+        <Method name="setFecha" returnType="void" visibility="public">
+          <Argument type="String" name="fecha"/>
+        </Method>
+        <Method name="getHora" returnType="String" visibility="public"/>
+        <Method name="setHora" returnType="void" visibility="public">
+          <Argument type="String" name="hora"/>
+        </Method>
+        <Method name="getIdMesa" returnType="int" visibility="public"/>
+        <Method name="setIdMesa" returnType="void" visibility="public">
+          <Argument type="int" name="idMesa"/>
+        </Method>
+        <Method name="getEstado" returnType="String" visibility="public"/>
+        <Method name="setEstado" returnType="void" visibility="public">
+          <Argument type="String" name="estado"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Enum name="EstadoMesa" package="Model.entidades" visibility="public" xPosition="1358.0" yPosition="788.0">
+      <Literals>
+        <Literal name="LIBRE"/>
+        <Literal name="RESERVADA"/>
+        <Literal name="OCUPADA"/>
+      </Literals>
+    </Enum>
+    <Enum name="EstadoReserva" package="Model.entidades" visibility="public" xPosition="1094.0" yPosition="788.0">
+      <Literals>
+        <Literal name="PENDIENTE"/>
+        <Literal name="CONFIRMADA"/>
+        <Literal name="CANCELADA"/>
+      </Literals>
+    </Enum>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="Model.entidades.ArbolReservas" target="Model.entidades.Reserva" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="derecho" source="Model.entidades.NodoArbolReserva" target="Model.entidades.NodoArbolReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="izquierdo" source="Model.entidades.NodoArbolReserva" target="Model.entidades.NodoArbolReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="reservas" source="Model.entidades.NodoArbolReserva" target="Model.entidades.Reserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Reserva&gt;"/>
+    <UseRelation source="Model.entidades.NodoArbolReserva" target="Model.entidades.Reserva" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="siguiente" source="Model.entidades.NodoReserva" target="Model.entidades.NodoReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Model.entidades.ListaReservas" target="Model.entidades.Reserva" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="reserva" source="Model.entidades.NodoReserva" target="Model.entidades.Reserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="raiz" source="Model.entidades.ArbolReservas" target="Model.entidades.NodoArbolReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="cabeza" source="Model.entidades.ListaReservas" target="Model.entidades.NodoReserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

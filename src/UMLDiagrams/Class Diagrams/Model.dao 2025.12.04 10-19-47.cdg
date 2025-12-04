@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Model.dao">
+  <ClassDiagramComponents>
+    <Class name="AdministradorDAO" package="Model.dao" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="validarLogin" returnType="boolean" visibility="public">
+          <Argument type="String" name="usuario"/>
+          <Argument type="String" name="password"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MesaDAO" package="Model.dao" visibility="public" xPosition="446.0" yPosition="34.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="listarMesas" returnType="ArrayList&lt;Mesa&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ReservaDAO" package="Model.dao" visibility="public" xPosition="61.0" yPosition="193.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="registrarReserva" returnType="boolean" visibility="public">
+          <Argument type="Reserva" name="r"/>
+        </Method>
+        <Method name="actualizarEstado" returnType="boolean" visibility="public">
+          <Argument type="int" name="idReserva"/>
+          <Argument type="String" name="nuevoEstado"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>
